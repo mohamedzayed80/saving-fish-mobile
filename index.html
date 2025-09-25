@@ -3,20 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fish's escape </title>
+    <title>Fish's Escape</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', 
+            font-family: 'Arial', sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #ffcfe9, #a6e3ff);
+            background: linear-gradient(135deg, #ffeef8, #f0e6ff, #ffe8f0);
             min-height: 100vh;
-            color: #5a3d5c;
+            color: #4a4a4a;
             overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Decorative blush dots */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(rgba(255, 182, 193, 0.4) 2px, transparent 2px);
+            background-size: 30px 30px;
+            z-index: -1;
+            opacity: 0.5;
         }
         
         .container {
@@ -33,25 +48,26 @@
         
         h1 {
             font-size: 3.5rem;
-            color: #ff6b9d;
-            text-shadow: 3px 3px 0 #ffd1dc;
+            color: #8b6f9e;
+            text-shadow: 2px 2px 0 rgba(139, 111, 158, 0.2);
             margin-bottom: 10px;
             animation: float 3s ease-in-out infinite;
         }
         
         .subtitle {
             font-size: 1.5rem;
-            color: #5a3d5c;
+            color: #4a4a4a;
             margin-bottom: 30px;
         }
         
         .message-box {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 25px;
             margin: 30px 0;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            border: 3px dashed #ff9ec0;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.5);
             text-align: center;
         }
         
@@ -63,41 +79,44 @@
         
         .hearts {
             font-size: 2rem;
-            color: #ff6b9d;
+            color: rgba(255, 182, 193, 0.3);
             margin: 15px 0;
             animation: pulse 1.5s infinite;
         }
         
         .game-container {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 20px;
             margin: 30px 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
             text-align: center;
-            border: 4px solid #a6e3ff;
+            border: 2px solid rgba(255, 255, 255, 0.5);
             position: relative;
         }
         
         h2 {
-            color: #5a3d5c;
+            color: #4a4a4a;
             margin-bottom: 20px;
             font-size: 2rem;
         }
         
         #gameCanvas {
-            background: #e0f7ff;
+            background: rgba(255, 255, 255, 0.6);
             border-radius: 15px;
             display: block;
             margin: 0 auto;
-            border: 3px solid #ff9ec0;
+            border: 2px solid rgba(255, 182, 193, 0.3);
             cursor: none;
+            width: 100%;
+            max-width: 800px;
         }
         
         .game-instructions {
             margin-top: 20px;
             font-size: 1.1rem;
-            color: #5a3d5c;
+            color: #4a4a4a;
         }
         
         .score-board {
@@ -110,14 +129,14 @@
         }
         
         .score-item {
-            background: #ffd1dc;
+            background: rgba(255, 182, 193, 0.2);
             padding: 10px 20px;
             border-radius: 50px;
-            color: #5a3d5c;
+            color: #4a4a4a;
         }
         
         .start-button {
-            background: linear-gradient(135deg, #ff6b9d, #ff9ec0);
+            background: rgba(139, 111, 158, 0.7);
             border: none;
             border-radius: 50px;
             color: white;
@@ -126,18 +145,19 @@
             padding: 15px 40px;
             margin: 20px 0;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
         
         .start-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            background: rgba(139, 111, 158, 0.9);
         }
         
         .start-button:active {
             transform: translateY(1px);
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
         }
         
         .game-controls {
@@ -148,7 +168,7 @@
         }
         
         .control-button {
-            background: linear-gradient(135deg, #a6e3ff, #6bc9ff);
+            background: rgba(139, 111, 158, 0.6);
             border: none;
             border-radius: 30px;
             color: white;
@@ -156,13 +176,14 @@
             font-weight: bold;
             padding: 8px 20px;
             cursor: pointer;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
         
         .control-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            background: rgba(139, 111, 158, 0.8);
         }
         
         .difficulty-selector {
@@ -177,24 +198,34 @@
         .difficulty-selector select {
             padding: 8px 15px;
             border-radius: 20px;
-            border: 2px solid #ff9ec0;
+            border: 2px solid rgba(139, 111, 158, 0.3);
             font-size: 1rem;
-            background: white;
+            background: rgba(255, 255, 255, 0.7);
+            color: #4a4a4a;
         }
         
         footer {
             text-align: center;
             padding: 30px 0;
             font-size: 1.1rem;
-            color: #5a3d5c;
+            color: #8b6f9e;
         }
         
         .bubble {
             position: absolute;
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 182, 193, 0.3);
             border-radius: 50%;
             animation: floatUp 15s infinite ease-in-out;
             z-index: -1;
+        }
+        
+        /* Sparkles decorative element */
+        .sparkle {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: sparkle 2s infinite alternate;
+            z-index: -1;
+            opacity: 0;
         }
         
         .emoji-display {
@@ -206,7 +237,7 @@
             font-size: 1.2rem;
             font-weight: bold;
             margin-top: 10px;
-            color: #5a3d5c;
+            color: #4a4a4a;
         }
         
         .power-up {
@@ -237,6 +268,12 @@
             100% { transform: rotate(360deg); }
         }
         
+        @keyframes sparkle {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 0.6; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.5); }
+        }
+        
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
             .subtitle { font-size: 1.2rem; }
@@ -248,7 +285,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>✨ prettiest fish ✨</h1>
+            <h1>✨ Prettiest Fish ✨</h1>
             <div class="subtitle">You're doing amazing, cutesss, Success is destined for you!</div>
         </header>
         
@@ -261,7 +298,7 @@
         </div>
         
         <div class="game-container">
-            <h2>fish in the indian sea</h2>
+            <h2>Fish in the Indian Sea</h2>
             <button class="start-button" id="startButton">Start Game</button>
             
             <div class="difficulty-selector">
@@ -300,8 +337,8 @@
         </div>
         
         <footer>
-            <p> dumbess fish </p>
-            <p>always Remember: youre the best, youre the prettiest and the cutest hottest and smartesst and you dont need to be anything else </p>
+            <p>Dumbess Fish</p>
+            <p>Always Remember: You're the best, you're the prettiest and the cutest hottest and smartesst and you don't need to be anything else</p>
         </footer>
     </div>
     
@@ -321,9 +358,24 @@
             }
         }
         
+        // Create sparkles for decorative effect
+        function createSparkles() {
+            const body = document.querySelector('body');
+            for (let i = 0; i < 15; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.classList.add('sparkle');
+                sparkle.innerHTML = '✨';
+                sparkle.style.left = `${Math.random() * 100}vw`;
+                sparkle.style.top = `${Math.random() * 100}vh`;
+                sparkle.style.animationDelay = `${Math.random() * 5}s`;
+                body.appendChild(sparkle);
+            }
+        }
+        
         // Game code
         document.addEventListener('DOMContentLoaded', function() {
             createBubbles();
+            createSparkles();
             
             const canvas = document.getElementById('gameCanvas');
             const ctx = canvas.getContext('2d');
@@ -378,7 +430,7 @@
                 x: canvas.width / 2,
                 y: canvas.height / 2,
                 radius: 30,
-                color: '#ff6b9d',
+                color: '#8b6f9e',
                 speed: 5,
                 baseSpeed: 5
             };
@@ -436,7 +488,7 @@
             function drawFish() {
                 ctx.beginPath();
                 ctx.arc(fish.x, fish.y, fish.radius, 0, Math.PI * 2);
-                ctx.fillStyle = powerUpActive && powerUpType === '🚀' ? '#ffcc00' : fish.color;
+                ctx.fillStyle = powerUpActive && powerUpType === '🚀' ? '#8b6f9e' : fish.color;
                 ctx.fill();
                 ctx.closePath();
                 
@@ -446,7 +498,7 @@
                 ctx.lineTo(fish.x - fish.radius - 20, fish.y - 15);
                 ctx.lineTo(fish.x - fish.radius - 20, fish.y + 15);
                 ctx.closePath();
-                ctx.fillStyle = powerUpActive && powerUpType === '🚀' ? '#ffaa00' : '#ff9ec0';
+                ctx.fillStyle = powerUpActive && powerUpType === '🚀' ? '#6a4f7c' : '#6a4f7c';
                 ctx.fill();
                 
                 // Fish eye
@@ -471,9 +523,9 @@
                     ctx.textBaseline = 'middle';
                     
                     if (obj.type === 'negative') {
-                        ctx.fillStyle = powerUpActive && powerUpType === '💎' ? '#888' : '#333';
+                        ctx.fillStyle = powerUpActive && powerUpType === '💎' ? '#888' : '#4a4a4a';
                     } else {
-                        ctx.fillStyle = '#ff6b9d';
+                        ctx.fillStyle = '#8b6f9e';
                     }
                     
                     ctx.fillText(obj.emoji, obj.x, obj.y);
@@ -484,7 +536,7 @@
                     ctx.font = `${powerUp.radius * 2}px Arial`;
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    ctx.fillStyle = '#ffcc00';
+                    ctx.fillStyle = '#8b6f9e';
                     ctx.fillText(powerUp.type, powerUp.x, powerUp.y);
                 });
             }
@@ -721,10 +773,11 @@
                 // Clear canvas
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
-                // Draw background with gradient
+                // Draw background with gradient matching the design
                 const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-                gradient.addColorStop(0, '#e0f7ff');
-                gradient.addColorStop(1, '#b3e0ff');
+                gradient.addColorStop(0, '#ffeef8');
+                gradient.addColorStop(0.5, '#f0e6ff');
+                gradient.addColorStop(1, '#ffe8f0');
                 ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 
@@ -746,8 +799,8 @@
                     
                     // Draw power-up indicator if active
                     if (powerUpActive) {
-                        ctx.font = '20px Comic Sans MS';
-                        ctx.fillStyle = '#ff6b9d';
+                        ctx.font = '20px Arial';
+                        ctx.fillStyle = '#8b6f9e';
                         ctx.textAlign = 'left';
                         ctx.fillText(`Power-up: ${powerUpType} (${Math.ceil(powerUpTimer/60)}s)`, 10, 30);
                     }
@@ -756,23 +809,23 @@
                     ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
                     
-                    ctx.font = 'bold 40px Comic Sans MS';
+                    ctx.font = 'bold 40px Arial';
                     ctx.fillStyle = 'white';
                     ctx.textAlign = 'center';
                     
                     if (gameWon) {
                         ctx.fillText('You Won! 🎉', canvas.width/2, canvas.height/2 - 40);
-                        ctx.font = '30px Comic Sans MS';
+                        ctx.font = '30px Arial';
                         ctx.fillText(`Final Score: ${score} | Level: ${level}`, canvas.width/2, canvas.height/2 + 20);
                         ctx.fillText('Lishi, you are destined for success!', canvas.width/2, canvas.height/2 + 60);
                     } else {
                         ctx.fillText('Game Over', canvas.width/2, canvas.height/2 - 40);
-                        ctx.font = '30px Comic Sans MS';
+                        ctx.font = '30px Arial';
                         ctx.fillText(`Final Score: ${score} | Level: ${level}`, canvas.width/2, canvas.height/2 + 20);
                         ctx.fillText("But don't worry, just try again!", canvas.width/2, canvas.height/2 + 60);
                     }
                     
-                    ctx.font = '25px Comic Sans MS';
+                    ctx.font = '25px Arial';
                     ctx.fillText('Click "Restart" to play again', canvas.width/2, canvas.height/2 + 120);
                     
                     // Cancel animation frame to stop the game loop
@@ -787,24 +840,29 @@
             function drawInitialScreen() {
                 // Draw background with gradient
                 const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-                gradient.addColorStop(0, '#e0f7ff');
-                gradient.addColorStop(1, '#b3e0ff');
+                gradient.addColorStop(0, '#ffeef8');
+                gradient.addColorStop(0.5, '#f0e6ff');
+                gradient.addColorStop(1, '#ffe8f0');
                 ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 
                 // Draw welcome message
-                ctx.font = 'bold 40px Comic Sans MS';
-                ctx.fillStyle = '#5a3d5c';
+                ctx.font = 'bold 40px Arial';
+                ctx.fillStyle = '#4a4a4a';
                 ctx.textAlign = 'center';
                 ctx.fillText('Click Start to Play!', canvas.width/2, canvas.height/2 - 60);
                 
                 // Draw sample emojis
                 ctx.font = '40px Arial';
+                ctx.fillStyle = '#8b6f9e';
                 ctx.fillText('💗🎓💘❣️💟💞💓', canvas.width/2, canvas.height/2);
+                ctx.fillStyle = '#4a4a4a';
                 ctx.fillText('🇮🇳 👳🏿‍♂️ 🧔🏿‍♂️', canvas.width/2, canvas.height/2 + 60);
+                ctx.fillStyle = '#8b6f9e';
                 ctx.fillText('⭐ 💎 🚀', canvas.width/2, canvas.height/2 + 120);
                 
-                ctx.font = '20px Comic Sans MS';
+                ctx.font = '20px Arial';
+                ctx.fillStyle = '#4a4a4a';
                 ctx.fillText('Collect positive emojis, avoid ni99er ones!', canvas.width/2, canvas.height/2 + 180);
             }
             
@@ -814,4 +872,3 @@
     </script>
 </body>
 </html>
-
